@@ -4,6 +4,7 @@ export default {
     public: { url: '/', static: true },
     src: { url: '/dist' },
   },
+  
   plugins: [
     [
       '@snowpack/plugin-typescript',
@@ -23,11 +24,15 @@ export default {
   },
   packageOptions: {
     /* ... */
+    polyfillNode: false
   },
   devOptions: {
     /* ... */
   },
   buildOptions: {
     /* ... */
+  },
+  alias: {
+
   },
 };
