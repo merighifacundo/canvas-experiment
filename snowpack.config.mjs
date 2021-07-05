@@ -31,7 +31,8 @@ export default {
   },
   buildOptions: {
     /* ... */
-    out: "docs"
+    out: "docs",
+    baseUrl: "canvas-experiment/"
   },
   alias: {
 
