@@ -31,6 +31,7 @@ export default {
   },
   buildOptions: {
     /* ... */
+    out: "docs"
   },
   alias: {
 
