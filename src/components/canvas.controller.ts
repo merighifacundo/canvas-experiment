@@ -3,6 +3,7 @@ import Circle from "./circle";
 import type Coordinate from "./coordinate";
 import Line from "./line";
 import type Listener from "./listener";
+import Rectangle from "./rectangle";
 
 
 export default class CanvasController implements Listener { 
@@ -38,6 +39,16 @@ export default class CanvasController implements Listener {
 					this.command.start = coordinate;
 				}
 			}
+			if (this.command.action === 'addRectangle') {
+				if (this.command.start != null) {
+					const rectangle = new Rectangle(this.canvas);
+					rectangle.draw(this.command.start, 50, 50);
+					this.command = null;
+					return ;
+				} else {
+					this.command.start = coordinate;
+				}
+			}
 		}
 	}
 	dragEventHandler (coordinate:Coordinate) {
@@ -51,6 +62,18 @@ export default class CanvasController implements Listener {
 
 	public addLine() {
 		this.command = { action: "addLine" };
+		
+	}
+	public addRectangle() {
+		this.command = { action: "addRectangle" };
+		
+	}
+
+	public save() {
+		if (this.canvas.canvas != null) {
+			var image = this.canvas.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"); //Convert image to 'octet-stream' (Just a download, really)
+			window.location.href = image;
+		}
 		
 	}
 

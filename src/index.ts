@@ -18,3 +18,17 @@ if (addLine) {
 		canvasController.addLine();
 	})
 }
+
+const addRectangle = document.getElementById('rectangle');
+if (addRectangle) {
+	addRectangle.addEventListener('mousedown', () => {
+		canvasController.addRectangle();
+	})
+}
+
+const addSave = document.getElementById('save');
+if (addSave) {
+	addSave.addEventListener('mousedown', () => {
+		canvasController.save();
+	})
+}

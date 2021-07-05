@@ -30,7 +30,72 @@ export default class Canvas {
             this.canvas.addEventListener("touchmove", this.dragEventHandler);
             this.canvas.addEventListener("touchend", this.releaseEventHandler);
             this.canvas.addEventListener("touchcancel", this.cancelEventHandler);
+            this.canvas.addEventListener("drop", this.drop, false);
+            this.canvas.addEventListener('dragenter', this.dragenter, false);
+            this.canvas.addEventListener('dragover', this.dragover, false);
         }
+    }
+
+    public dragenter = (e:any) => {
+        console.log(e)
+        this.onEvent(e);
+      }
+      
+    public dragover = (e:any) => {
+        console.log(e)
+        this.onEvent(e);
+      }
+      
+    public drop = (e:any) => {
+        console.log(e)
+        this.onEvent(e);
+      
+       let data = e.dataTransfer;
+       let files = data.files;
+       // handle files
+       this.handleFiles(files);
+      }
+    
+    
+    
+    public handleFiles = (files:any) => {
+       for (var i = 0; i < files.length; i++) {
+          var theFile = files[i];
+          // check if the file is an image
+          var isImagen = /^image\//;
+          // if it's not an image continu
+          if (!isImagen.test(theFile.type)) {
+            continue;
+          }
+          
+          var img = new Image(); 
+          img.src = window.URL.createObjectURL(theFile);
+          const context = this.context;
+          debugger;
+          img.onload = function() {
+            if (context != null) {
+                context.save();  
+                //markDroppableZone();
+                context.beginPath();
+                context.rect(10,10,160,160);
+                // clip the context
+                context.clip();
+                // draw the image 
+                context.drawImage(this, 10, 10);
+                context.restore();
+                window.URL.revokeObjectURL(this.src);   
+            }  
+          }
+       }
+    }
+    
+    
+    
+    public onEvent = (e:any) => {
+        
+        e.stopPropagation();
+        e.preventDefault();
+        
     }
 
     public addEventListener(listener:Listener) {
@@ -48,6 +113,16 @@ export default class Canvas {
 
     private cancelEventHandler = () => {
         console.log(`cancelEventHandler`);
+    }
+
+    private handleDragStart = (e:any) => {
+        console.log(e);
+        e.stopPropagation();
+    }
+
+    private handleDragEnd = (e:any) => {
+        console.log(e);
+        e.stopPropagation();
     }
 
     private pressEventHandler = (e: MouseEvent | TouchEvent) => {
