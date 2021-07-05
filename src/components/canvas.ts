@@ -1,4 +1,5 @@
 import type { Component } from "./component";
+import type Listener from "./listener";
 
 
 export default class Canvas {
@@ -6,6 +7,7 @@ export default class Canvas {
     public canvas:HTMLCanvasElement | null;
     public context:CanvasRenderingContext2D | null = null;
     private components:Array<Component> = [];
+    private listeners:Array<Listener> = [];
     private activateInteraction:boolean = false;
     private clear() {
         if (this.context && this.canvas) {
@@ -31,6 +33,10 @@ export default class Canvas {
         }
     }
 
+    public addEventListener(listener:Listener) {
+        this.listeners.push(listener);
+    }
+
     public add(component:Component) {
         this.components.push(component);
     }
@@ -51,6 +57,9 @@ export default class Canvas {
         const clientX = (e as MouseEvent).clientX - offsetLeft;
         const clientY = (e as MouseEvent).clientY - offsetTop;
         this.activateInteraction = !this.activateInteraction;
+        this.listeners.forEach(listener => {
+            listener.pressEventHandler({x:clientX, y:clientY})
+        })
         console.log(`pressEventHandler with clients: ${clientX} and ${clientY}`);
     }
 
@@ -62,9 +71,13 @@ export default class Canvas {
         const offsetTop = this.canvas !== null  ?  this.canvas.offsetTop : 0;
         const clientX = (e as MouseEvent).clientX - offsetLeft;
         const clientY = (e as MouseEvent).clientY - offsetTop;
+        /*
         this.clear();
         this.components.forEach(component => {
             component.mouseInteraction(clientX, clientY);
+        })*/
+        this.listeners.forEach(listener => {
+            listener.dragEventHandler({x:clientX, y:clientY})
         })
         //console.log(`dragEventHandler with x: ${mouseX} and y:${mouseY} with clients: ${clientX} and ${clientY}`);
     }
